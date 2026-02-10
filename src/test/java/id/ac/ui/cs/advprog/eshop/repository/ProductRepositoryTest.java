@@ -141,4 +141,38 @@ class ProductRepositoryTest {
         Product result = productRepository.findById("no-id");
         assertNull(result);
     }
+
+    @Test
+    void testFindByIdIfMoreThanOneProduct() {
+        Product product1 = new Product();
+        product1.setProductId("id-1");
+        productRepository.create(product1);
+
+        Product product2 = new Product();
+        product2.setProductId("id-2");
+        productRepository.create(product2);
+
+        Product found = productRepository.findById("id-2");
+        assertEquals("id-2", found.getProductId());
+    }
+
+    @Test
+    void testUpdateIfMoreThanOneProduct() {
+        Product product1 = new Product();
+        product1.setProductId("id-1");
+        productRepository.create(product1);
+
+        Product product2 = new Product();
+        product2.setProductId("id-2");
+        productRepository.create(product2);
+        
+        Product editedProduct2 = new Product();
+        editedProduct2.setProductId("id-2");
+        editedProduct2.setProductName("Nama Baru");
+
+        Product result = productRepository.update(editedProduct2);
+
+        assertNotNull(result);
+        assertEquals("Nama Baru", result.getProductName());
+    }
 }
